@@ -20,10 +20,15 @@ import java.awt.event.MouseEvent;
 public class MouseController {
 
     @PostMapping(value = "/move", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity move(@RequestParam int x, @RequestParam int y) throws Exception {
+    public String move(@RequestParam int x, @RequestParam int y) throws Exception {
+        log.info("move invoked");
         Robot robot = new Robot();
-        robot.mouseMove(x, y);
-
-        return ResponseEntity.ok("gg");
+        Point mouse = MouseInfo.getPointerInfo().getLocation();
+        int currentX = (int) mouse.getX();
+        int currentY = (int) mouse.getY();
+        log.info(String.format("currentX %d    ---    currentY %d", currentX, currentY));
+        robot.mouseMove(x * 2 + currentX, y * 2 + currentY);
+        log.info("move performed");
+        return "gg";
     }
 }
